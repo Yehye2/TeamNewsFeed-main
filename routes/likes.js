@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const { Sequelize } = require('sequelize');
 const { Posts, Likes, Users } = require("../models");
 const authMiddleware = require("../middlewares/auth-middleware");
 
@@ -112,17 +113,23 @@ router.get("/my-likes", authMiddleware, async (req, res) => {
       attributes: ["postId"],
     });
 
-    const postId = likes.map((like) => like.postId);
+    const postIds = likes.map((like) => like.postId);
 
-    // postId 목록을 사용하여 해당 게시물들을 조회
-    // Posts 모델과 직접적인 연관 관계 설정 없이 조회합니다.
+    // postId 목록을 사용하여 해당 게시물들을 조회하고 좋아요 수를 함께 가져옵니다.
     const posts = await Posts.findAll({
-      where: { postId: postId },
+      where: { postId: postIds },
+      include: [
+        {
+          model: Likes,
+          attributes: [[Sequelize.fn("COUNT", Sequelize.col("Likes.PostId")), "likeCount"]],
+        },
+      ],
+      group: ["Posts.postId"], // postId로 그룹화하여 중복 게시물을 제거합니다.
     });
 
     res.status(200).json({ posts });
   } catch (error) {
-    console.error(error);
+    console.error(`Error: ${error.message}`);
     res.status(500).json({ errorMessage: "서버 오류" });
   }
 });
