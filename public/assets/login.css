@@ -1,0 +1,79 @@
+.login {
+  font-size: 5rem;
+  margin-left: 10px;
+  margin-right: auto;
+  padding: 10px;
+}
+.email-box {
+  background-color: white;
+  padding: 10px;
+  margin: 10px;
+  font-size: 1.3rem;
+}
+.password-box {
+  background-color: white;
+  padding: 10px;
+  margin: 10px;
+  font-size: 1.3rem;
+}
+.email-in {
+  border-radius: 5px;
+  width: 13.8rem;
+  height: 30px;
+}
+.password-in {
+  border-radius: 5px;
+  width: 12rem;
+  height: 30px;
+}
+.buttons{
+  padding: 5px;
+}
+.loginbutton {
+  border-radius: 5px;
+  width: 8rem;
+  padding: 2px;
+  margin-left: 20px;
+}
+.signupbutton {
+  border-radius: 5px;
+  width: 8rem;
+  padding: 2px;
+  margin-left: 20px;
+}
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+.login-section {
+  margin-top: 80px;
+}
+#signup-modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+#signup-modal-close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#signup-modal-close:hover,
+#signup-modal-close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
