@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { Posts, Likes } = require("../models");
+const { Posts, Likes, Users } = require("../models");
 const authMiddleware = require("../middlewares/auth-middleware");
 
 // 좋아요 추가하기
@@ -94,6 +94,33 @@ router.get("/:postId/like-count", async (req, res) => {
     });
 
     res.status(200).json({ likeCount });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ errorMessage: "서버 오류" });
+  }
+});
+
+
+// 사용자의 좋아요한 게시물 목록 조회
+router.get("/my-likes", authMiddleware, async (req, res) => {
+  try {
+    const { userId } = res.locals.user;
+
+    // 좋아요한 게시물의 postId 목록 조회
+    const likes = await Likes.findAll({
+      where: { userId },
+      attributes: ["postId"],
+    });
+
+    const postId = likes.map((like) => like.postId);
+
+    // postId 목록을 사용하여 해당 게시물들을 조회
+    // Posts 모델과 직접적인 연관 관계 설정 없이 조회합니다.
+    const posts = await Posts.findAll({
+      where: { postId: postId },
+    });
+
+    res.status(200).json({ posts });
   } catch (error) {
     console.error(error);
     res.status(500).json({ errorMessage: "서버 오류" });

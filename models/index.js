@@ -31,6 +31,10 @@ Object.keys(db).forEach(modelName => {
   }
 });
 
+// 연관 관계 설정 추가
+db.Likes.belongsTo(db.Posts, { foreignKey: "postId" });
+db.Posts.hasMany(db.Likes, { foreignKey: "postId" });
+
 db.Sequelize = Sequelize;
 
 module.exports = db;
