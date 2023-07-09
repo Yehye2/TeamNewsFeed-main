@@ -1,4 +1,5 @@
 const express = require("express");
+const { Sequelize } = require('sequelize');
 const router = express.Router();
 const { Posts } = require("../models");
 const authMiddleware = require("../middlewares/auth-middleware");
@@ -32,14 +33,26 @@ async function create(req, res) {
 async function getAll(req, res) {
   try {
     const posts = await Posts.findAll({
-      attributes: ["postId", "UserId", "nickname", "title", "createdAt", "updatedAt", "img"],
-      order: [["createdAt", "DESC"]]
+      attributes: [
+        "postId",
+        "UserId",
+        "nickname",
+        "title",
+        "createdAt",
+        "updatedAt",
+        "img",
+        [
+          Sequelize.literal(`(SELECT COUNT(*) FROM Likes WHERE Likes.PostId = Posts.postId)`),
+          "likeCount"
+        ]
+      ],
+      order: [["createdAt", "DESC"]],
     });
     res.status(200).json({ posts });
   } catch (error) {
     console.error(`Error: ${error.message}`);
     res.status(400).json({
-      errorMessage: "게시글 조회에 실패했습니다."
+      errorMessage: "게시글 조회에 실패했습니다.",
     });
   }
 }
@@ -48,8 +61,21 @@ async function getOne(req, res) {
   try {
     const { postId } = req.params;
     const post = await Posts.findOne({
-      attributes: ["postId", "UserId", "nickname", "title", "content", "createdAt", "updatedAt", "img"],
-      where: { postId }
+      attributes: [
+        "postId",
+        "UserId",
+        "nickname",
+        "title",
+        "content",
+        "createdAt",
+        "updatedAt",
+        "img",
+        [
+          Sequelize.literal(`(SELECT COUNT(*) FROM Likes WHERE Likes.PostId = Posts.postId)`),
+          "likeCount"
+        ]
+      ],
+      where: { postId },
     });
 
     if (!post) {
