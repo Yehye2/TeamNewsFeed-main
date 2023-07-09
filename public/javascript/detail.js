@@ -7,7 +7,7 @@ $(document).ready(() => {
   getPosts();
 });
 
-// 페이지 url에서 postId 추출
+// 페이지 URL에서 postId 추출
 const url = window.location.pathname;
 const postId = url.split("/posts/")[1];
 
@@ -16,8 +16,8 @@ const postUpdateButton = document.querySelector("#postUpdate");
 const postUpdateModal = document.querySelector("#postUpdateModal");
 const postUpdateModalClose = document.querySelector("#postUpdateModalClose");
 
-// '수정' 버튼 : 수정 모달을 연다.(보이게한다.)
-postUpdateButton.addEventListener("click", e => {
+// '수정' 버튼: 수정 모달을 엽니다. (표시됨)
+postUpdateButton.addEventListener("click", (e) => {
   postUpdateModal.classList.replace("d-none", "show");
 });
 
@@ -26,10 +26,10 @@ postModalCloseButton.addEventListener("click", () => {
   postUpdateModal.classList.add("d-none");
 });
 
-// 수정 모달폼 - 수정하기 버튼
+// 수정 모달 폼 - 수정하기 버튼
 const modalUpdateButton = document.querySelector("#modalUpdateButton");
 
-modalUpdateButton.addEventListener("click", async e => {
+modalUpdateButton.addEventListener("click", async (e) => {
   try {
     const title = document.querySelector("#update-title").value;
     const content = document.querySelector("#update-content").value;
@@ -37,9 +37,9 @@ modalUpdateButton.addEventListener("click", async e => {
     const response = await fetch(`/api/posts/${postId}`, {
       method: "PATCH",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({ title, content, img })
+      body: JSON.stringify({ title, content, img }),
     });
     const result = await response.json();
     if (response.ok) {
@@ -57,13 +57,13 @@ modalUpdateButton.addEventListener("click", async e => {
 const postDeleteButton = document.querySelector("#postDelete");
 
 // 게시글 삭제 버튼에 이벤트 추가
-postDeleteButton.addEventListener("click", async e => {
+postDeleteButton.addEventListener("click", async (e) => {
   try {
     const isDelete = confirm("정말 삭제하시겠습니까?");
     if (!isDelete) return;
 
     const response = await fetch(`/api/posts/${postId}`, {
-      method: "DELETE"
+      method: "DELETE",
     });
     if (response.ok) {
       const data = await isLoggedIn();
@@ -93,7 +93,8 @@ async function getPosts() {
     const contentWrapper = document.querySelector(".content");
     let postImg = post.img;
     if (!post.img) {
-      postImg = "https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg";
+      postImg =
+        "https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg";
     }
 
     const postHtml = ` <div class="post-container-2">
